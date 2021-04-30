@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import * as animationFrame from 'dom-helpers/animationFrame'
 import React, { Component } from 'react'
+import moment from 'moment'
 import { findDOMNode } from 'react-dom'
 import memoize from 'memoize-one'
 
@@ -20,11 +21,25 @@ export default class TimeGrid extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { gutterWidth: undefined, isOverflowing: null }
+    this.state = {
+      gutterWidth: undefined,
+      isOverflowing: null,
+      showMin: false,
+      showMax: false,
+    }
 
     this.scrollRef = React.createRef()
     this.contentRef = React.createRef()
     this._scrollRatio = null
+
+    this.baseMin = moment()
+      .set({ hour: 0, minute: 0, second: 0 })
+      .toDate()
+    this.baseMax = moment()
+      .set({ hour: 23, minute: 59, second: 59 })
+      .toDate()
+    this.handleShowMin = this.handleShowMin.bind(this)
+    this.handleShowMax = this.handleShowMax.bind(this)
   }
 
   UNSAFE_componentWillMount() {
@@ -52,6 +67,18 @@ export default class TimeGrid extends Component {
   handleResize = () => {
     animationFrame.cancel(this.rafHandle)
     this.rafHandle = animationFrame.request(this.checkOverflow)
+  }
+
+  handleShowMin() {
+    this.setState({
+      showMin: true,
+    })
+  }
+
+  handleShowMax() {
+    this.setState({
+      showMax: true,
+    })
   }
 
   componentWillUnmount() {
@@ -114,48 +141,123 @@ export default class TimeGrid extends Component {
       localizer,
       dayLayoutAlgorithm,
     } = this.props
+    const { showMin, showMax } = this.state
 
     const resources = this.memoizedResources(this.props.resources, accessors)
     const groupedEvents = resources.groupEvents(events)
-    const groupedBackgroundEvents = resources.groupEvents(backgroundEvents)
+
+    let hasMinOutsideEvent = false
+    let hasMaxOutsideEvent = false
 
     return resources.map(([id, resource], i) =>
       range.map((date, jj) => {
-        let daysEvents = (groupedEvents.get(id) || []).filter(event =>
-          dates.inRange(
-            date,
-            accessors.start(event),
-            accessors.end(event),
-            'day'
-          )
-        )
+        let daysEvents = (groupedEvents.get(id) || [])
+          .map(event => {
+            if (
+              moment(accessors.start(event)).hour() < moment(min).hour() &&
+              !showMin
+            ) {
+              hasMinOutsideEvent = true
+              return false
+            } else if (
+              (moment(accessors.start(event)).hour() > moment(max).hour() ||
+                moment(accessors.end(event)).hour() > moment(max).hour()) &&
+              !showMax
+            ) {
+              hasMaxOutsideEvent = true
+              return false
+            } else {
+              return event
+            }
+          })
+          .filter(Boolean)
 
-        let daysBackgroundEvents = (
-          groupedBackgroundEvents.get(id) || []
-        ).filter(event =>
-          dates.inRange(
-            date,
-            accessors.start(event),
-            accessors.end(event),
-            'day'
-          )
-        )
+        const daysBackgroundEvents = []
+
+        if (showMin) {
+          daysBackgroundEvents.push({
+            id: 'minHiddenHours',
+            title: '',
+            background: true,
+            min: true,
+            start: moment(date)
+              .set({ hour: 0, minute: 0, second: 0 })
+              .toDate(),
+            end: dates.merge(date, min),
+          })
+        }
+
+        if (showMax) {
+          daysBackgroundEvents.push({
+            id: 'maxHiddenHours',
+            title: '',
+            background: true,
+            max: true,
+            start: dates.merge(date, max),
+            end: moment(date)
+              .set({ hour: 23, minute: 59, second: 59 })
+              .toDate(),
+          })
+        }
 
         return (
-          <DayColumn
-            {...this.props}
-            localizer={localizer}
-            min={dates.merge(date, min)}
-            max={dates.merge(date, max)}
-            resource={resource && id}
-            components={components}
-            isNow={dates.eq(date, now, 'day')}
-            key={i + '-' + jj}
-            date={date}
-            events={daysEvents}
-            backgroundEvents={daysBackgroundEvents}
-            dayLayoutAlgorithm={dayLayoutAlgorithm}
-          />
+          <>
+            {hasMinOutsideEvent && (
+              <div
+                className={clsx(
+                  'rbc-working-hours-wrapper',
+                  'rbc-working-hours-wrapper-min'
+                )}
+              >
+                <div
+                  onClick={this.handleShowMin}
+                  className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
+                />
+                <div className="rbc-working-hours-tooltip">
+                  Click to see events outside of working hours
+                </div>
+              </div>
+            )}
+            <DayColumn
+              {...this.props}
+              localizer={localizer}
+              min={
+                showMin
+                  ? dates.merge(date, this.baseMin)
+                  : dates.merge(date, min)
+              }
+              max={
+                showMax
+                  ? dates.merge(date, this.baseMax)
+                  : dates.merge(date, max)
+              }
+              resource={resource && id}
+              components={components}
+              isNow={dates.eq(date, now, 'day')}
+              key={i + '-' + jj}
+              date={date}
+              events={daysEvents}
+              backgroundEvents={daysBackgroundEvents}
+              dayLayoutAlgorithm={dayLayoutAlgorithm}
+            />
+
+            {hasMaxOutsideEvent && (
+              <div
+                className={clsx(
+                  'rbc-working-hours-wrapper',
+                  'rbc-working-hours-wrapper-max'
+                )}
+              >
+                <div
+                  onClick={this.handleShowMax}
+                  className={clsx('rbc-working-hours', 'rbc-working-hours-max')}
+                />
+                <div className="rbc-working-hours-tooltip">
+                  Click to see events outside of working hours
+                </div>
+              </div>
+            )}
+          </>
         )
       })
     )
@@ -181,6 +283,7 @@ export default class TimeGrid extends Component {
       longPressThreshold,
       resizable,
     } = this.props
+    const { showMin, showMax } = this.state
 
     width = width || this.state.gutterWidth
 
@@ -258,8 +361,16 @@ export default class TimeGrid extends Component {
             date={start}
             ref={this.gutterRef}
             localizer={localizer}
-            min={dates.merge(start, min)}
-            max={dates.merge(start, max)}
+            min={
+              showMin
+                ? dates.merge(start, this.baseMin)
+                : dates.merge(start, min)
+            }
+            max={
+              showMax
+                ? dates.merge(start, this.baseMax)
+                : dates.merge(start, max)
+            }
             step={this.props.step}
             getNow={this.props.getNow}
             timeslots={this.props.timeslots}
