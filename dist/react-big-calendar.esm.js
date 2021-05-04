@@ -4676,7 +4676,7 @@ var TimeGrid =
                   {
                     className: 'rbc-working-hours-tooltip',
                   },
-                  'Click to see events outside of working hours'
+                  'Expand non-working hours'
                 )
               ),
             React.createElement(
@@ -4713,7 +4713,7 @@ var TimeGrid =
                   {
                     className: 'rbc-working-hours-tooltip',
                   },
-                  'Click to see events outside of working hours'
+                  'Expand non-working hours'
                 )
               )
           )

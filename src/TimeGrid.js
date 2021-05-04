@@ -214,7 +214,7 @@ export default class TimeGrid extends Component {
                   className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
                 />
                 <div className="rbc-working-hours-tooltip">
-                  Click to see events outside of working hours
+                  Expand non-working hours
                 </div>
               </div>
             )}
@@ -253,7 +253,7 @@ export default class TimeGrid extends Component {
                   className={clsx('rbc-working-hours', 'rbc-working-hours-max')}
                 />
                 <div className="rbc-working-hours-tooltip">
-                  Click to see events outside of working hours
+                  Expand non-working hours
                 </div>
               </div>
             )}

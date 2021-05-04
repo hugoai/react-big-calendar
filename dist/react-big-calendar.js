@@ -19542,7 +19542,7 @@
                     {
                       className: 'rbc-working-hours-tooltip',
                     },
-                    'Click to see events outside of working hours'
+                    'Expand non-working hours'
                   )
                 ),
               React__default.createElement(
@@ -19582,7 +19582,7 @@
                     {
                       className: 'rbc-working-hours-tooltip',
                     },
-                    'Click to see events outside of working hours'
+                    'Expand non-working hours'
                   )
                 )
             )
