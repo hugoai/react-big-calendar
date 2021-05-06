@@ -6218,14 +6218,12 @@
     var popperInstanceRef = React.useRef()
     var update = React.useCallback(function() {
       var _popperInstanceRef$cu
-
       ;(_popperInstanceRef$cu = popperInstanceRef.current) == null
         ? void 0
         : _popperInstanceRef$cu.update()
     }, [])
     var forceUpdate = React.useCallback(function() {
       var _popperInstanceRef$cu2
-
       ;(_popperInstanceRef$cu2 = popperInstanceRef.current) == null
         ? void 0
         : _popperInstanceRef$cu2.forceUpdate()
@@ -19450,7 +19448,8 @@
           components = _this$props2.components,
           accessors = _this$props2.accessors,
           localizer = _this$props2.localizer,
-          dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm
+          dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
+          workingHourComponent = _this$props2.workingHourComponent
         var _this$state = this.state,
           showMin = _this$state.showMin,
           showMax = _this$state.showMax
@@ -19526,24 +19525,12 @@
                   'div',
                   {
                     className: clsx(
-                      'rbc-working-hours-wrapper',
-                      'rbc-working-hours-wrapper-min'
-                    ),
-                  },
-                  React__default.createElement('div', {
-                    onClick: _this2.handleShowMin,
-                    className: clsx(
                       'rbc-working-hours',
                       'rbc-working-hours-min'
                     ),
-                  }),
-                  React__default.createElement(
-                    'div',
-                    {
-                      className: 'rbc-working-hours-tooltip',
-                    },
-                    'Expand non-working hours'
-                  )
+                    onClick: _this2.handleShowMin,
+                  },
+                  workingHourComponent
                 ),
               React__default.createElement(
                 DayColumn,
@@ -19566,24 +19553,12 @@
                   'div',
                   {
                     className: clsx(
-                      'rbc-working-hours-wrapper',
-                      'rbc-working-hours-wrapper-max'
-                    ),
-                  },
-                  React__default.createElement('div', {
-                    onClick: _this2.handleShowMax,
-                    className: clsx(
                       'rbc-working-hours',
                       'rbc-working-hours-max'
                     ),
-                  }),
-                  React__default.createElement(
-                    'div',
-                    {
-                      className: 'rbc-working-hours-tooltip',
-                    },
-                    'Expand non-working hours'
-                  )
+                    onClick: _this2.handleShowMax,
+                  },
+                  workingHourComponent
                 )
             )
           })

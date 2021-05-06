@@ -140,6 +140,7 @@ export default class TimeGrid extends Component {
       accessors,
       localizer,
       dayLayoutAlgorithm,
+      workingHourComponent,
     } = this.props
     const { showMin, showMax } = this.state
 
@@ -204,18 +205,10 @@ export default class TimeGrid extends Component {
           <>
             {hasMinOutsideEvent && (
               <div
-                className={clsx(
-                  'rbc-working-hours-wrapper',
-                  'rbc-working-hours-wrapper-min'
-                )}
+                className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
+                onClick={this.handleShowMin}
               >
-                <div
-                  onClick={this.handleShowMin}
-                  className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
-                />
-                <div className="rbc-working-hours-tooltip">
-                  Expand non-working hours
-                </div>
+                {workingHourComponent}
               </div>
             )}
             <DayColumn
@@ -243,18 +236,10 @@ export default class TimeGrid extends Component {
 
             {hasMaxOutsideEvent && (
               <div
-                className={clsx(
-                  'rbc-working-hours-wrapper',
-                  'rbc-working-hours-wrapper-max'
-                )}
+                className={clsx('rbc-working-hours', 'rbc-working-hours-max')}
+                onClick={this.handleShowMax}
               >
-                <div
-                  onClick={this.handleShowMax}
-                  className={clsx('rbc-working-hours', 'rbc-working-hours-max')}
-                />
-                <div className="rbc-working-hours-tooltip">
-                  Expand non-working hours
-                </div>
+                {workingHourComponent}
               </div>
             )}
           </>
@@ -473,6 +458,8 @@ TimeGrid.propTypes = {
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
   longPressThreshold: PropTypes.number,
+
+  workingHourComponent: PropTypes.node.isRequired,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,

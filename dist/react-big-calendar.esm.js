@@ -4584,7 +4584,8 @@ var TimeGrid =
         components = _this$props2.components,
         accessors = _this$props2.accessors,
         localizer = _this$props2.localizer,
-        dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm
+        dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
+        workingHourComponent = _this$props2.workingHourComponent
       var _this$state = this.state,
         showMin = _this$state.showMin,
         showMax = _this$state.showMax
@@ -4662,22 +4663,10 @@ var TimeGrid =
               React.createElement(
                 'div',
                 {
-                  className: clsx(
-                    'rbc-working-hours-wrapper',
-                    'rbc-working-hours-wrapper-min'
-                  ),
-                },
-                React.createElement('div', {
-                  onClick: _this2.handleShowMin,
                   className: clsx('rbc-working-hours', 'rbc-working-hours-min'),
-                }),
-                React.createElement(
-                  'div',
-                  {
-                    className: 'rbc-working-hours-tooltip',
-                  },
-                  'Expand non-working hours'
-                )
+                  onClick: _this2.handleShowMin,
+                },
+                workingHourComponent
               ),
             React.createElement(
               DayColumn,
@@ -4699,22 +4688,10 @@ var TimeGrid =
               React.createElement(
                 'div',
                 {
-                  className: clsx(
-                    'rbc-working-hours-wrapper',
-                    'rbc-working-hours-wrapper-max'
-                  ),
-                },
-                React.createElement('div', {
-                  onClick: _this2.handleShowMax,
                   className: clsx('rbc-working-hours', 'rbc-working-hours-max'),
-                }),
-                React.createElement(
-                  'div',
-                  {
-                    className: 'rbc-working-hours-tooltip',
-                  },
-                  'Expand non-working hours'
-                )
+                  onClick: _this2.handleShowMax,
+                },
+                workingHourComponent
               )
           )
         })
