@@ -6218,12 +6218,14 @@
     var popperInstanceRef = React.useRef()
     var update = React.useCallback(function() {
       var _popperInstanceRef$cu
+
       ;(_popperInstanceRef$cu = popperInstanceRef.current) == null
         ? void 0
         : _popperInstanceRef$cu.update()
     }, [])
     var forceUpdate = React.useCallback(function() {
       var _popperInstanceRef$cu2
+
       ;(_popperInstanceRef$cu2 = popperInstanceRef.current) == null
         ? void 0
         : _popperInstanceRef$cu2.forceUpdate()
@@ -19752,6 +19754,7 @@
     selected: propTypes.object,
     selectable: propTypes.oneOf([true, false, 'ignoreEvents']),
     longPressThreshold: propTypes.number,
+    workingHourComponent: propTypes.node.isRequired,
     onNavigate: propTypes.func,
     onSelectSlot: propTypes.func,
     onSelectEnd: propTypes.func,
