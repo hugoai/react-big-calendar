@@ -4882,7 +4882,6 @@ TimeGrid.propTypes =
         selected: PropTypes.object,
         selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
         longPressThreshold: PropTypes.number,
-        workingHourComponent: PropTypes.node.isRequired,
         onNavigate: PropTypes.func,
         onSelectSlot: PropTypes.func,
         onSelectEnd: PropTypes.func,

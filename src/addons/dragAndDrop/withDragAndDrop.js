@@ -38,6 +38,15 @@ export default function withDragAndDrop(Calendar) {
 
     constructor(...args) {
       super(...args)
+
+      const { components } = this.props
+
+      this.components = mergeComponents(components, {
+        eventWrapper: EventWrapper,
+        eventContainerWrapper: EventContainerWrapper,
+        weekWrapper: WeekWrapper,
+      })
+
       this.state = { interacting: false }
     }
 
@@ -90,7 +99,7 @@ export default function withDragAndDrop(Calendar) {
     }
 
     render() {
-      const { selectable, elementProps, components, ...props } = this.props
+      const { selectable, elementProps, ...props } = this.props
       const { interacting } = this.state
 
       delete props.onEventDrop
@@ -116,11 +125,7 @@ export default function withDragAndDrop(Calendar) {
           <Calendar
             {...props}
             elementProps={elementPropsWithDropFromOutside}
-            components={mergeComponents(components, {
-              eventWrapper: EventWrapper,
-              eventContainerWrapper: EventContainerWrapper,
-              weekWrapper: WeekWrapper,
-            })}
+            components={this.components}
           />
         </DnDContext.Provider>
       )
