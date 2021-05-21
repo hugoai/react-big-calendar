@@ -291,7 +291,7 @@ export default class TimeGrid extends Component {
           (dates.isJustDate(eStart) && dates.isJustDate(eEnd)) ||
           (!showMultiDayTimes && !dates.eq(eStart, eEnd, 'day'))
         ) {
-          allDayEvents.push(event)
+          allDayEvents.push({ ...event, allDay: true })
         } else {
           rangeEvents.push(event)
         }

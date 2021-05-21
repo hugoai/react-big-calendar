@@ -60,12 +60,14 @@ export function inRange(e, start, end, accessors) {
   let eEnd = accessors.end(e)
 
   let startsBeforeEnd = dates.lte(eStart, end, 'day')
+  let endsBeforeEnd = dates.lte(eEnd, end, 'day')
+
   // when the event is zero duration we need to handle a bit differently
   let endsAfterStart = !dates.eq(eStart, eEnd, 'minutes')
     ? dates.gt(eEnd, start, 'minutes')
     : dates.gte(eEnd, start, 'minutes')
 
-  return startsBeforeEnd && endsAfterStart
+  return startsBeforeEnd && endsAfterStart && endsBeforeEnd
 }
 
 export function segsOverlap(seg, otherSegs) {

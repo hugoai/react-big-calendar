@@ -1650,12 +1650,13 @@ function eventLevels(rowSegments, limit) {
 function inRange(e, start, end, accessors) {
   var eStart = startOf(accessors.start(e), 'day')
   var eEnd = accessors.end(e)
-  var startsBeforeEnd = lte(eStart, end, 'day') // when the event is zero duration we need to handle a bit differently
+  var startsBeforeEnd = lte(eStart, end, 'day')
+  var endsBeforeEnd = lte(eEnd, end, 'day') // when the event is zero duration we need to handle a bit differently
 
   var endsAfterStart = !eq(eStart, eEnd, 'minutes')
     ? gt(eEnd, start, 'minutes')
     : gte(eEnd, start, 'minutes')
-  return startsBeforeEnd && endsAfterStart
+  return startsBeforeEnd && endsAfterStart && endsBeforeEnd
 }
 function segsOverlap(seg, otherSegs) {
   return otherSegs.some(function(otherSeg) {
@@ -4737,7 +4738,11 @@ var TimeGrid =
             (isJustDate(eStart) && isJustDate(eEnd)) ||
             (!showMultiDayTimes && !eq(eStart, eEnd, 'day'))
           ) {
-            allDayEvents.push(event)
+            allDayEvents.push(
+              _extends({}, event, {
+                allDay: true,
+              })
+            )
           } else {
             rangeEvents.push(event)
           }
