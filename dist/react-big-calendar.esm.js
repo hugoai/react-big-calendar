@@ -4586,14 +4586,13 @@ var TimeGrid =
         accessors = _this$props2.accessors,
         localizer = _this$props2.localizer,
         dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
-        workingHourComponent = _this$props2.workingHourComponent
+        workingHourComponent = _this$props2.workingHourComponent,
+        workingHourEnabled = _this$props2.workingHourEnabled
       var _this$state = this.state,
         showMin = _this$state.showMin,
         showMax = _this$state.showMax
       var resources = this.memoizedResources(this.props.resources, accessors)
       var groupedEvents = resources.groupEvents(events)
-      var hasMinOutsideEvent = false
-      var hasMaxOutsideEvent = false
       return resources.map(function(_ref, i) {
         var id = _ref[0],
           resource = _ref[1]
@@ -4605,7 +4604,6 @@ var TimeGrid =
                   moment$1(min).hour() &&
                 !showMin
               ) {
-                hasMinOutsideEvent = true
                 return false
               } else if (
                 (moment$1(accessors.start(event)).hour() >
@@ -4614,7 +4612,6 @@ var TimeGrid =
                     moment$1(max).hour()) &&
                 !showMax
               ) {
-                hasMaxOutsideEvent = true
                 return false
               } else {
                 return event
@@ -4660,7 +4657,9 @@ var TimeGrid =
           return React.createElement(
             React.Fragment,
             null,
-            hasMinOutsideEvent &&
+            workingHourEnabled &&
+              !showMin &&
+              moment$1(min).hours() !== 0 &&
               React.createElement(
                 'div',
                 {
@@ -4685,7 +4684,9 @@ var TimeGrid =
                 dayLayoutAlgorithm: dayLayoutAlgorithm,
               })
             ),
-            hasMaxOutsideEvent &&
+            workingHourEnabled &&
+              !showMax &&
+              moment$1(max).hours() !== 23 &&
               React.createElement(
                 'div',
                 {
@@ -4888,6 +4889,7 @@ TimeGrid.propTypes =
         selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
         longPressThreshold: PropTypes.number,
         workingHourComponent: PropTypes.node.isRequired,
+        workingHourEnabled: PropTypes.bool.isRequired,
         onNavigate: PropTypes.func,
         onSelectSlot: PropTypes.func,
         onSelectEnd: PropTypes.func,

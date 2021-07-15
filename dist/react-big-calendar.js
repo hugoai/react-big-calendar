@@ -19452,14 +19452,13 @@
           accessors = _this$props2.accessors,
           localizer = _this$props2.localizer,
           dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
-          workingHourComponent = _this$props2.workingHourComponent
+          workingHourComponent = _this$props2.workingHourComponent,
+          workingHourEnabled = _this$props2.workingHourEnabled
         var _this$state = this.state,
           showMin = _this$state.showMin,
           showMax = _this$state.showMax
         var resources = this.memoizedResources(this.props.resources, accessors)
         var groupedEvents = resources.groupEvents(events)
-        var hasMinOutsideEvent = false
-        var hasMaxOutsideEvent = false
         return resources.map(function(_ref, i) {
           var id = _ref[0],
             resource = _ref[1]
@@ -19470,14 +19469,12 @@
                   moment(accessors.start(event)).hour() < moment(min).hour() &&
                   !showMin
                 ) {
-                  hasMinOutsideEvent = true
                   return false
                 } else if (
                   (moment(accessors.start(event)).hour() > moment(max).hour() ||
                     moment(accessors.end(event)).hour() > moment(max).hour()) &&
                   !showMax
                 ) {
-                  hasMaxOutsideEvent = true
                   return false
                 } else {
                   return event
@@ -19523,7 +19520,9 @@
             return React__default.createElement(
               React__default.Fragment,
               null,
-              hasMinOutsideEvent &&
+              workingHourEnabled &&
+                !showMin &&
+                moment(min).hours() !== 0 &&
                 React__default.createElement(
                   'div',
                   {
@@ -19551,7 +19550,9 @@
                   dayLayoutAlgorithm: dayLayoutAlgorithm,
                 })
               ),
-              hasMaxOutsideEvent &&
+              workingHourEnabled &&
+                !showMax &&
+                moment(max).hours() !== 23 &&
                 React__default.createElement(
                   'div',
                   {
@@ -19760,6 +19761,7 @@
     selectable: propTypes.oneOf([true, false, 'ignoreEvents']),
     longPressThreshold: propTypes.number,
     workingHourComponent: propTypes.node.isRequired,
+    workingHourEnabled: propTypes.bool.isRequired,
     onNavigate: propTypes.func,
     onSelectSlot: propTypes.func,
     onSelectEnd: propTypes.func,

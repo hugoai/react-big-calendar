@@ -141,14 +141,12 @@ export default class TimeGrid extends Component {
       localizer,
       dayLayoutAlgorithm,
       workingHourComponent,
+      workingHourEnabled,
     } = this.props
     const { showMin, showMax } = this.state
 
     const resources = this.memoizedResources(this.props.resources, accessors)
     const groupedEvents = resources.groupEvents(events)
-
-    let hasMinOutsideEvent = false
-    let hasMaxOutsideEvent = false
 
     return resources.map(([id, resource], i) =>
       range.map((date, jj) => {
@@ -158,14 +156,12 @@ export default class TimeGrid extends Component {
               moment(accessors.start(event)).hour() < moment(min).hour() &&
               !showMin
             ) {
-              hasMinOutsideEvent = true
               return false
             } else if (
               (moment(accessors.start(event)).hour() > moment(max).hour() ||
                 moment(accessors.end(event)).hour() > moment(max).hour()) &&
               !showMax
             ) {
-              hasMaxOutsideEvent = true
               return false
             } else {
               return event
@@ -203,7 +199,7 @@ export default class TimeGrid extends Component {
 
         return (
           <>
-            {hasMinOutsideEvent && (
+            {workingHourEnabled && !showMin && moment(min).hours() !== 0 && (
               <div
                 className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
                 onClick={this.handleShowMin}
@@ -234,7 +230,7 @@ export default class TimeGrid extends Component {
               dayLayoutAlgorithm={dayLayoutAlgorithm}
             />
 
-            {hasMaxOutsideEvent && (
+            {workingHourEnabled && !showMax && moment(max).hours() !== 23 && (
               <div
                 className={clsx('rbc-working-hours', 'rbc-working-hours-max')}
                 onClick={this.handleShowMax}
@@ -460,6 +456,7 @@ TimeGrid.propTypes = {
   longPressThreshold: PropTypes.number,
 
   workingHourComponent: PropTypes.node.isRequired,
+  workingHourEnabled: PropTypes.bool.isRequired,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
