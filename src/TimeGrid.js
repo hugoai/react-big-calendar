@@ -150,24 +150,14 @@ export default class TimeGrid extends Component {
 
     return resources.map(([id, resource], i) =>
       range.map((date, jj) => {
-        let daysEvents = (groupedEvents.get(id) || [])
-          .map(event => {
-            if (
-              moment(accessors.start(event)).hour() < moment(min).hour() &&
-              !showMin
-            ) {
-              return false
-            } else if (
-              (moment(accessors.start(event)).hour() > moment(max).hour() ||
-                moment(accessors.end(event)).hour() > moment(max).hour()) &&
-              !showMax
-            ) {
-              return false
-            } else {
-              return event
-            }
-          })
-          .filter(Boolean)
+        let daysEvents = (groupedEvents.get(id) || []).filter(event =>
+          dates.inRange(
+            date,
+            accessors.start(event),
+            accessors.end(event),
+            'day'
+          )
+        )
 
         const daysBackgroundEvents = []
 
@@ -263,6 +253,7 @@ export default class TimeGrid extends Component {
       showMultiDayTimes,
       longPressThreshold,
       resizable,
+      disableTimeGutter,
     } = this.props
     const { showMin, showMax } = this.state
 
@@ -332,6 +323,7 @@ export default class TimeGrid extends Component {
           onDrillDown={this.props.onDrillDown}
           getDrilldownView={this.props.getDrilldownView}
           resizable={resizable}
+          disableTimeGutter={disableTimeGutter}
         />
         <div
           ref={this.contentRef}
@@ -358,6 +350,7 @@ export default class TimeGrid extends Component {
             components={components}
             className="rbc-time-gutter"
             getters={getters}
+            disableTimeGutter={disableTimeGutter}
           />
           {this.renderEvents(
             range,
@@ -457,6 +450,7 @@ TimeGrid.propTypes = {
 
   workingHourComponent: PropTypes.node.isRequired,
   workingHourEnabled: PropTypes.bool.isRequired,
+  disableTimeGutter: PropTypes.bool.isRequired,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,

@@ -18901,22 +18901,30 @@
         var _this$props3 = this.props,
           resource = _this$props3.resource,
           components = _this$props3.components,
-          getters = _this$props3.getters
+          getters = _this$props3.getters,
+          disableTimeGutter = _this$props3.disableTimeGutter
         return React__default.createElement(
           'div',
           {
+            style: disableTimeGutter
+              ? {
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                }
+              : {},
             className: 'rbc-time-gutter rbc-time-column',
           },
-          this.slotMetrics.groups.map(function(grp, idx) {
-            return React__default.createElement(TimeSlotGroup, {
-              key: idx,
-              group: grp,
-              resource: resource,
-              components: components,
-              renderSlot: _this2.renderSlot,
-              getters: getters,
+          !disableTimeGutter &&
+            this.slotMetrics.groups.map(function(grp, idx) {
+              return React__default.createElement(TimeSlotGroup, {
+                key: idx,
+                group: grp,
+                resource: resource,
+                components: components,
+                renderSlot: _this2.renderSlot,
+                getters: getters,
+              })
             })
-          })
         )
       }
 
@@ -18932,6 +18940,7 @@
     getters: propTypes.object,
     localizer: propTypes.object.isRequired,
     resource: propTypes.string,
+    disableTimeGutter: propTypes.bool.isRequired,
   }
 
   function getWidth(node, client) {
@@ -19117,7 +19126,8 @@
             _this$props3$componen2 === void 0
               ? ResourceHeader
               : _this$props3$componen2,
-          resizable = _this$props3.resizable
+          resizable = _this$props3.resizable,
+          disableTimeGutter = _this$props3.disableTimeGutter
         var style = {}
 
         if (isOverflowing) {
@@ -19135,19 +19145,20 @@
               isOverflowing && 'rbc-overflowing'
             ),
           },
-          React__default.createElement(
-            'div',
-            {
-              className: 'rbc-label rbc-time-header-gutter',
-              style: {
-                width: width,
-                minWidth: width,
-                maxWidth: width,
+          !disableTimeGutter &&
+            React__default.createElement(
+              'div',
+              {
+                className: 'rbc-label rbc-time-header-gutter',
+                style: {
+                  width: width,
+                  minWidth: width,
+                  maxWidth: width,
+                },
               },
-            },
-            TimeGutterHeader &&
-              React__default.createElement(TimeGutterHeader, null)
-          ),
+              TimeGutterHeader &&
+                React__default.createElement(TimeGutterHeader, null)
+            ),
           resources.map(function(_ref, idx) {
             var id = _ref[0],
               resource = _ref[1]
@@ -19240,6 +19251,7 @@
     onDrillDown: propTypes.func,
     getDrilldownView: propTypes.func.isRequired,
     scrollRef: propTypes.any,
+    disableTimeGutter: propTypes.bool.isRequired,
   }
 
   var NONE = {}
@@ -19463,24 +19475,16 @@
           var id = _ref[0],
             resource = _ref[1]
           return range.map(function(date, jj) {
-            var daysEvents = (groupedEvents.get(id) || [])
-              .map(function(event) {
-                if (
-                  moment(accessors.start(event)).hour() < moment(min).hour() &&
-                  !showMin
-                ) {
-                  return false
-                } else if (
-                  (moment(accessors.start(event)).hour() > moment(max).hour() ||
-                    moment(accessors.end(event)).hour() > moment(max).hour()) &&
-                  !showMax
-                ) {
-                  return false
-                } else {
-                  return event
-                }
-              })
-              .filter(Boolean)
+            var daysEvents = (groupedEvents.get(id) || []).filter(function(
+              event
+            ) {
+              return inRange(
+                date,
+                accessors.start(event),
+                accessors.end(event),
+                'day'
+              )
+            })
             var daysBackgroundEvents = []
 
             if (showMin) {
@@ -19587,7 +19591,8 @@
           max = _this$props3.max,
           showMultiDayTimes = _this$props3.showMultiDayTimes,
           longPressThreshold = _this$props3.longPressThreshold,
-          resizable = _this$props3.resizable
+          resizable = _this$props3.resizable,
+          disableTimeGutter = _this$props3.disableTimeGutter
         var _this$state2 = this.state,
           showMin = _this$state2.showMin,
           showMax = _this$state2.showMax
@@ -19657,6 +19662,7 @@
             onDrillDown: this.props.onDrillDown,
             getDrilldownView: this.props.getDrilldownView,
             resizable: resizable,
+            disableTimeGutter: disableTimeGutter,
           }),
           React__default.createElement(
             'div',
@@ -19677,6 +19683,7 @@
               components: components,
               className: 'rbc-time-gutter',
               getters: getters,
+              disableTimeGutter: disableTimeGutter,
             }),
             this.renderEvents(
               range,
@@ -19762,6 +19769,7 @@
     longPressThreshold: propTypes.number,
     workingHourComponent: propTypes.node.isRequired,
     workingHourEnabled: propTypes.bool.isRequired,
+    disableTimeGutter: propTypes.bool.isRequired,
     onNavigate: propTypes.func,
     onSelectSlot: propTypes.func,
     onSelectEnd: propTypes.func,

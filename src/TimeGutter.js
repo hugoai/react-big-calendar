@@ -36,22 +36,26 @@ export default class TimeGutter extends Component {
   }
 
   render() {
-    const { resource, components, getters } = this.props
+    const { resource, components, getters, disableTimeGutter } = this.props
 
     return (
-      <div className="rbc-time-gutter rbc-time-column">
-        {this.slotMetrics.groups.map((grp, idx) => {
-          return (
-            <TimeSlotGroup
-              key={idx}
-              group={grp}
-              resource={resource}
-              components={components}
-              renderSlot={this.renderSlot}
-              getters={getters}
-            />
-          )
-        })}
+      <div
+        style={disableTimeGutter ? { paddingLeft: 0, paddingRight: 0 } : {}}
+        className="rbc-time-gutter rbc-time-column"
+      >
+        {!disableTimeGutter &&
+          this.slotMetrics.groups.map((grp, idx) => {
+            return (
+              <TimeSlotGroup
+                key={idx}
+                group={grp}
+                resource={resource}
+                components={components}
+                renderSlot={this.renderSlot}
+                getters={getters}
+              />
+            )
+          })}
       </div>
     )
   }
@@ -68,4 +72,6 @@ TimeGutter.propTypes = {
 
   localizer: PropTypes.object.isRequired,
   resource: PropTypes.string,
+
+  disableTimeGutter: PropTypes.bool.isRequired,
 }

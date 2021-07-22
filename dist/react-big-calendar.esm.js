@@ -4053,22 +4053,30 @@ var TimeGutter =
       var _this$props3 = this.props,
         resource = _this$props3.resource,
         components = _this$props3.components,
-        getters = _this$props3.getters
+        getters = _this$props3.getters,
+        disableTimeGutter = _this$props3.disableTimeGutter
       return React.createElement(
         'div',
         {
+          style: disableTimeGutter
+            ? {
+                paddingLeft: 0,
+                paddingRight: 0,
+              }
+            : {},
           className: 'rbc-time-gutter rbc-time-column',
         },
-        this.slotMetrics.groups.map(function(grp, idx) {
-          return React.createElement(TimeSlotGroup, {
-            key: idx,
-            group: grp,
-            resource: resource,
-            components: components,
-            renderSlot: _this2.renderSlot,
-            getters: getters,
+        !disableTimeGutter &&
+          this.slotMetrics.groups.map(function(grp, idx) {
+            return React.createElement(TimeSlotGroup, {
+              key: idx,
+              group: grp,
+              resource: resource,
+              components: components,
+              renderSlot: _this2.renderSlot,
+              getters: getters,
+            })
           })
-        })
       )
     }
 
@@ -4086,6 +4094,7 @@ TimeGutter.propTypes =
         getters: PropTypes.object,
         localizer: PropTypes.object.isRequired,
         resource: PropTypes.string,
+        disableTimeGutter: PropTypes.bool.isRequired,
       }
     : {}
 
@@ -4251,7 +4260,8 @@ var TimeGridHeader =
           _this$props3$componen2 === void 0
             ? ResourceHeader
             : _this$props3$componen2,
-        resizable = _this$props3.resizable
+        resizable = _this$props3.resizable,
+        disableTimeGutter = _this$props3.disableTimeGutter
       var style = {}
 
       if (isOverflowing) {
@@ -4269,18 +4279,19 @@ var TimeGridHeader =
             isOverflowing && 'rbc-overflowing'
           ),
         },
-        React.createElement(
-          'div',
-          {
-            className: 'rbc-label rbc-time-header-gutter',
-            style: {
-              width: width,
-              minWidth: width,
-              maxWidth: width,
+        !disableTimeGutter &&
+          React.createElement(
+            'div',
+            {
+              className: 'rbc-label rbc-time-header-gutter',
+              style: {
+                width: width,
+                minWidth: width,
+                maxWidth: width,
+              },
             },
-          },
-          TimeGutterHeader && React.createElement(TimeGutterHeader, null)
-        ),
+            TimeGutterHeader && React.createElement(TimeGutterHeader, null)
+          ),
         resources.map(function(_ref, idx) {
           var id = _ref[0],
             resource = _ref[1]
@@ -4373,6 +4384,7 @@ TimeGridHeader.propTypes =
         onDrillDown: PropTypes.func,
         getDrilldownView: PropTypes.func.isRequired,
         scrollRef: PropTypes.any,
+        disableTimeGutter: PropTypes.bool.isRequired,
       }
     : {}
 
@@ -4597,27 +4609,16 @@ var TimeGrid =
         var id = _ref[0],
           resource = _ref[1]
         return range.map(function(date, jj) {
-          var daysEvents = (groupedEvents.get(id) || [])
-            .map(function(event) {
-              if (
-                moment$1(accessors.start(event)).hour() <
-                  moment$1(min).hour() &&
-                !showMin
-              ) {
-                return false
-              } else if (
-                (moment$1(accessors.start(event)).hour() >
-                  moment$1(max).hour() ||
-                  moment$1(accessors.end(event)).hour() >
-                    moment$1(max).hour()) &&
-                !showMax
-              ) {
-                return false
-              } else {
-                return event
-              }
-            })
-            .filter(Boolean)
+          var daysEvents = (groupedEvents.get(id) || []).filter(function(
+            event
+          ) {
+            return inRange$1(
+              date,
+              accessors.start(event),
+              accessors.end(event),
+              'day'
+            )
+          })
           var daysBackgroundEvents = []
 
           if (showMin) {
@@ -4718,7 +4719,8 @@ var TimeGrid =
         max = _this$props3.max,
         showMultiDayTimes = _this$props3.showMultiDayTimes,
         longPressThreshold = _this$props3.longPressThreshold,
-        resizable = _this$props3.resizable
+        resizable = _this$props3.resizable,
+        disableTimeGutter = _this$props3.disableTimeGutter
       var _this$state2 = this.state,
         showMin = _this$state2.showMin,
         showMax = _this$state2.showMax
@@ -4788,6 +4790,7 @@ var TimeGrid =
           onDrillDown: this.props.onDrillDown,
           getDrilldownView: this.props.getDrilldownView,
           resizable: resizable,
+          disableTimeGutter: disableTimeGutter,
         }),
         React.createElement(
           'div',
@@ -4808,6 +4811,7 @@ var TimeGrid =
             components: components,
             className: 'rbc-time-gutter',
             getters: getters,
+            disableTimeGutter: disableTimeGutter,
           }),
           this.renderEvents(range, rangeEvents, rangeBackgroundEvents, getNow())
         )
@@ -4890,6 +4894,7 @@ TimeGrid.propTypes =
         longPressThreshold: PropTypes.number,
         workingHourComponent: PropTypes.node.isRequired,
         workingHourEnabled: PropTypes.bool.isRequired,
+        disableTimeGutter: PropTypes.bool.isRequired,
         onNavigate: PropTypes.func,
         onSelectSlot: PropTypes.func,
         onSelectEnd: PropTypes.func,
