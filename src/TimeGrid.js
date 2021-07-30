@@ -24,8 +24,8 @@ export default class TimeGrid extends Component {
     this.state = {
       gutterWidth: undefined,
       isOverflowing: null,
-      showMin: false,
-      showMax: false,
+      showMin: props.autoShowWorkingHours,
+      showMax: props.autoShowWorkingHours,
     }
 
     this.scrollRef = React.createRef()
@@ -451,6 +451,7 @@ TimeGrid.propTypes = {
   workingHourComponent: PropTypes.node.isRequired,
   workingHourEnabled: PropTypes.bool.isRequired,
   disableTimeGutter: PropTypes.bool.isRequired,
+  autoShowWorkingHours: PropTypes.bool.isRequired,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,

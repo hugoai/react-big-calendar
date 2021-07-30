@@ -19359,8 +19359,8 @@
         _this.state = {
           gutterWidth: undefined,
           isOverflowing: null,
-          showMin: false,
-          showMax: false,
+          showMin: props.autoShowWorkingHours,
+          showMax: props.autoShowWorkingHours,
         }
         _this.scrollRef = React__default.createRef()
         _this.contentRef = React__default.createRef()
@@ -19770,6 +19770,7 @@
     workingHourComponent: propTypes.node.isRequired,
     workingHourEnabled: propTypes.bool.isRequired,
     disableTimeGutter: propTypes.bool.isRequired,
+    autoShowWorkingHours: propTypes.bool.isRequired,
     onNavigate: propTypes.func,
     onSelectSlot: propTypes.func,
     onSelectEnd: propTypes.func,

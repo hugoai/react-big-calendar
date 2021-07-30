@@ -4493,8 +4493,8 @@ var TimeGrid =
       _this.state = {
         gutterWidth: undefined,
         isOverflowing: null,
-        showMin: false,
-        showMax: false,
+        showMin: props.autoShowWorkingHours,
+        showMax: props.autoShowWorkingHours,
       }
       _this.scrollRef = React.createRef()
       _this.contentRef = React.createRef()
@@ -4895,6 +4895,7 @@ TimeGrid.propTypes =
         workingHourComponent: PropTypes.node.isRequired,
         workingHourEnabled: PropTypes.bool.isRequired,
         disableTimeGutter: PropTypes.bool.isRequired,
+        autoShowWorkingHours: PropTypes.bool.isRequired,
         onNavigate: PropTypes.func,
         onSelectSlot: PropTypes.func,
         onSelectEnd: PropTypes.func,
