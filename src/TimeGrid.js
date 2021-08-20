@@ -142,6 +142,7 @@ export default class TimeGrid extends Component {
       dayLayoutAlgorithm,
       workingHourComponent,
       workingHourEnabled,
+      slotSelectionColor,
     } = this.props
     const { showMin, showMax } = this.state
 
@@ -210,6 +211,7 @@ export default class TimeGrid extends Component {
                   ? dates.merge(date, this.baseMax)
                   : dates.merge(date, max)
               }
+              slotSelectionColor={slotSelectionColor}
               resource={resource && id}
               components={components}
               isNow={dates.eq(date, now, 'day')}
@@ -452,6 +454,7 @@ TimeGrid.propTypes = {
   workingHourEnabled: PropTypes.bool.isRequired,
   disableTimeGutter: PropTypes.bool.isRequired,
   autoShowWorkingHours: PropTypes.bool.isRequired,
+  slotSelectionColor: PropTypes.string,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
@@ -467,6 +470,7 @@ TimeGrid.propTypes = {
 }
 
 TimeGrid.defaultProps = {
+  slotSelectionColor: '',
   step: 30,
   timeslots: 2,
   min: dates.startOf(new Date(), 'day'),

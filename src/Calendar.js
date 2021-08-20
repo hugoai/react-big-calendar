@@ -524,6 +524,8 @@ class Calendar extends React.Component {
      */
     eventPropGetter: PropTypes.func,
 
+    slotSelectionColor: PropTypes.string,
+
     /**
      * Optionally provide a function that returns an object of className or style props
      * to be applied to the time-slot node. Caution! Styles that change layout or
@@ -918,6 +920,7 @@ class Calendar extends React.Component {
       style,
       className,
       elementProps,
+      slotSelectionColor,
       date: current,
       getNow,
       length,
@@ -943,7 +946,6 @@ class Calendar extends React.Component {
 
     let CalToolbar = components.toolbar || Toolbar
     const label = View.title(current, { localizer, length })
-
     return (
       <div
         {...elementProps}
@@ -964,6 +966,7 @@ class Calendar extends React.Component {
         <View
           {...props}
           events={events}
+          slotSelectionColor={slotSelectionColor}
           backgroundEvents={backgroundEvents}
           date={current}
           getNow={getNow}

@@ -114,6 +114,7 @@ class DayColumn extends React.Component {
       resource,
       accessors,
       localizer,
+      slotSelectionColor,
       getters: { dayProp, ...getters },
       components: { eventContainerWrapper: EventContainer, ...components },
     } = this.props
@@ -124,6 +125,11 @@ class DayColumn extends React.Component {
     let selectDates = { start: startDate, end: endDate }
 
     const { className, style } = dayProp(max)
+
+    const slotSelectionStyles = { top, height }
+    if (slotSelectionColor) {
+      slotSelectionStyles.backgroundColor = slotSelectionColor
+    }
 
     return (
       <div
@@ -164,7 +170,7 @@ class DayColumn extends React.Component {
         </EventContainer>
 
         {selecting && (
-          <div className="rbc-slot-selection" style={{ top, height }}>
+          <div className="rbc-slot-selection" style={slotSelectionStyles}>
             <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
           </div>
         )}
@@ -411,6 +417,8 @@ DayColumn.propTypes = {
   eventOffset: PropTypes.number,
   longPressThreshold: PropTypes.number,
 
+  slotSelectionColor: PropTypes.string,
+
   onSelecting: PropTypes.func,
   onSelectSlot: PropTypes.func.isRequired,
   onSelectEvent: PropTypes.func.isRequired,
@@ -425,6 +433,7 @@ DayColumn.propTypes = {
 }
 
 DayColumn.defaultProps = {
+  slotSelectionColor: '',
   dragThroughEvents: true,
   timeslots: 2,
 }

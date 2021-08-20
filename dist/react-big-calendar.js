@@ -18689,6 +18689,7 @@
           resource = _this$props3.resource,
           accessors = _this$props3.accessors,
           localizer = _this$props3.localizer,
+          slotSelectionColor = _this$props3.slotSelectionColor,
           _this$props3$getters = _this$props3.getters,
           dayProp = _this$props3$getters.dayProp,
           getters = _objectWithoutPropertiesLoose(_this$props3$getters, [
@@ -18715,6 +18716,15 @@
         var _dayProp = dayProp(max),
           className = _dayProp.className,
           style = _dayProp.style
+
+        var slotSelectionStyles = {
+          top: top,
+          height: height,
+        }
+
+        if (slotSelectionColor) {
+          slotSelectionStyles.backgroundColor = slotSelectionColor
+        }
 
         return React__default.createElement(
           'div',
@@ -18767,10 +18777,7 @@
               'div',
               {
                 className: 'rbc-slot-selection',
-                style: {
-                  top: top,
-                  height: height,
-                },
+                style: slotSelectionStyles,
               },
               React__default.createElement(
                 'span',
@@ -18814,6 +18821,7 @@
     selectable: propTypes.oneOf([true, false, 'ignoreEvents']),
     eventOffset: propTypes.number,
     longPressThreshold: propTypes.number,
+    slotSelectionColor: propTypes.string,
     onSelecting: propTypes.func,
     onSelectSlot: propTypes.func.isRequired,
     onSelectEvent: propTypes.func.isRequired,
@@ -18825,6 +18833,7 @@
     dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
   }
   DayColumn.defaultProps = {
+    slotSelectionColor: '',
     dragThroughEvents: true,
     timeslots: 2,
   }
@@ -19465,7 +19474,8 @@
           localizer = _this$props2.localizer,
           dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
           workingHourComponent = _this$props2.workingHourComponent,
-          workingHourEnabled = _this$props2.workingHourEnabled
+          workingHourEnabled = _this$props2.workingHourEnabled,
+          slotSelectionColor = _this$props2.slotSelectionColor
         var _this$state = this.state,
           showMin = _this$state.showMin,
           showMax = _this$state.showMax
@@ -19544,6 +19554,7 @@
                   localizer: localizer,
                   min: showMin ? merge(date, _this2.baseMin) : merge(date, min),
                   max: showMax ? merge(date, _this2.baseMax) : merge(date, max),
+                  slotSelectionColor: slotSelectionColor,
                   resource: resource && id,
                   components: components,
                   isNow: eq(date, now, 'day'),
@@ -19771,6 +19782,7 @@
     workingHourEnabled: propTypes.bool.isRequired,
     disableTimeGutter: propTypes.bool.isRequired,
     autoShowWorkingHours: propTypes.bool.isRequired,
+    slotSelectionColor: propTypes.string,
     onNavigate: propTypes.func,
     onSelectSlot: propTypes.func,
     onSelectEnd: propTypes.func,
@@ -19783,6 +19795,7 @@
     dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
   }
   TimeGrid.defaultProps = {
+    slotSelectionColor: '',
     step: 30,
     timeslots: 2,
     min: startOf(new Date(), 'day'),
@@ -21973,6 +21986,7 @@
           style = _this$props4.style,
           className = _this$props4.className,
           elementProps = _this$props4.elementProps,
+          slotSelectionColor = _this$props4.slotSelectionColor,
           current = _this$props4.date,
           getNow = _this$props4.getNow,
           length = _this$props4.length,
@@ -21990,6 +22004,7 @@
             'style',
             'className',
             'elementProps',
+            'slotSelectionColor',
             'date',
             'getNow',
             'length',
@@ -22034,6 +22049,7 @@
             View,
             _extends({}, props, {
               events: events,
+              slotSelectionColor: slotSelectionColor,
               backgroundEvents: backgroundEvents,
               date: current,
               getNow: getNow,
@@ -22565,6 +22581,7 @@
      * ```
      */
     eventPropGetter: propTypes.func,
+    slotSelectionColor: propTypes.string,
 
     /**
      * Optionally provide a function that returns an object of className or style props

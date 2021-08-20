@@ -3838,6 +3838,7 @@ var DayColumn =
         resource = _this$props3.resource,
         accessors = _this$props3.accessors,
         localizer = _this$props3.localizer,
+        slotSelectionColor = _this$props3.slotSelectionColor,
         _this$props3$getters = _this$props3.getters,
         dayProp = _this$props3$getters.dayProp,
         getters = _objectWithoutPropertiesLoose(_this$props3$getters, [
@@ -3864,6 +3865,15 @@ var DayColumn =
       var _dayProp = dayProp(max),
         className = _dayProp.className,
         style = _dayProp.style
+
+      var slotSelectionStyles = {
+        top: top,
+        height: height,
+      }
+
+      if (slotSelectionColor) {
+        slotSelectionStyles.backgroundColor = slotSelectionColor
+      }
 
       return React.createElement(
         'div',
@@ -3916,10 +3926,7 @@ var DayColumn =
             'div',
             {
               className: 'rbc-slot-selection',
-              style: {
-                top: top,
-                height: height,
-              },
+              style: slotSelectionStyles,
             },
             React.createElement(
               'span',
@@ -3965,6 +3972,7 @@ DayColumn.propTypes =
         selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
         eventOffset: PropTypes.number,
         longPressThreshold: PropTypes.number,
+        slotSelectionColor: PropTypes.string,
         onSelecting: PropTypes.func,
         onSelectSlot: PropTypes.func.isRequired,
         onSelectEvent: PropTypes.func.isRequired,
@@ -3977,6 +3985,7 @@ DayColumn.propTypes =
       }
     : {}
 DayColumn.defaultProps = {
+  slotSelectionColor: '',
   dragThroughEvents: true,
   timeslots: 2,
 }
@@ -4599,7 +4608,8 @@ var TimeGrid =
         localizer = _this$props2.localizer,
         dayLayoutAlgorithm = _this$props2.dayLayoutAlgorithm,
         workingHourComponent = _this$props2.workingHourComponent,
-        workingHourEnabled = _this$props2.workingHourEnabled
+        workingHourEnabled = _this$props2.workingHourEnabled,
+        slotSelectionColor = _this$props2.slotSelectionColor
       var _this$state = this.state,
         showMin = _this$state.showMin,
         showMax = _this$state.showMax
@@ -4675,6 +4685,7 @@ var TimeGrid =
                 localizer: localizer,
                 min: showMin ? merge(date, _this2.baseMin) : merge(date, min),
                 max: showMax ? merge(date, _this2.baseMax) : merge(date, max),
+                slotSelectionColor: slotSelectionColor,
                 resource: resource && id,
                 components: components,
                 isNow: eq(date, now, 'day'),
@@ -4896,6 +4907,7 @@ TimeGrid.propTypes =
         workingHourEnabled: PropTypes.bool.isRequired,
         disableTimeGutter: PropTypes.bool.isRequired,
         autoShowWorkingHours: PropTypes.bool.isRequired,
+        slotSelectionColor: PropTypes.string,
         onNavigate: PropTypes.func,
         onSelectSlot: PropTypes.func,
         onSelectEnd: PropTypes.func,
@@ -4909,6 +4921,7 @@ TimeGrid.propTypes =
       }
     : {}
 TimeGrid.defaultProps = {
+  slotSelectionColor: '',
   step: 30,
   timeslots: 2,
   min: startOf(new Date(), 'day'),
@@ -5915,6 +5928,7 @@ var Calendar =
         style = _this$props4.style,
         className = _this$props4.className,
         elementProps = _this$props4.elementProps,
+        slotSelectionColor = _this$props4.slotSelectionColor,
         current = _this$props4.date,
         getNow = _this$props4.getNow,
         length = _this$props4.length,
@@ -5932,6 +5946,7 @@ var Calendar =
           'style',
           'className',
           'elementProps',
+          'slotSelectionColor',
           'date',
           'getNow',
           'length',
@@ -5976,6 +5991,7 @@ var Calendar =
           View,
           _extends({}, props, {
             events: events,
+            slotSelectionColor: slotSelectionColor,
             backgroundEvents: backgroundEvents,
             date: current,
             getNow: getNow,
@@ -6509,6 +6525,7 @@ Calendar.propTypes =
          * ```
          */
         eventPropGetter: PropTypes.func,
+        slotSelectionColor: PropTypes.string,
 
         /**
          * Optionally provide a function that returns an object of className or style props
