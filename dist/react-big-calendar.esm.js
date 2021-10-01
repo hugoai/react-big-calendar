@@ -3936,12 +3936,18 @@ var DayColumn =
           ),
         isNow &&
           this.intervalTriggered &&
-          React.createElement('div', {
-            className: 'rbc-current-time-indicator',
-            style: {
-              top: this.state.timeIndicatorPosition + '%',
+          React.createElement(
+            'div',
+            {
+              className: 'rbc-current-time-indicator',
+              style: {
+                top: this.state.timeIndicatorPosition + '%',
+              },
             },
-          })
+            React.createElement('div', {
+              className: 'rbc-current-time-indicator-dot',
+            })
+          )
       )
     }
 

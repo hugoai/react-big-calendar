@@ -18787,12 +18787,18 @@
             ),
           isNow &&
             this.intervalTriggered &&
-            React__default.createElement('div', {
-              className: 'rbc-current-time-indicator',
-              style: {
-                top: this.state.timeIndicatorPosition + '%',
+            React__default.createElement(
+              'div',
+              {
+                className: 'rbc-current-time-indicator',
+                style: {
+                  top: this.state.timeIndicatorPosition + '%',
+                },
               },
-            })
+              React__default.createElement('div', {
+                className: 'rbc-current-time-indicator-dot',
+              })
+            )
         )
       }
 
