@@ -4673,7 +4673,9 @@ var TimeGrid =
 
           return React.createElement(
             React.Fragment,
-            null,
+            {
+              key: i + '--' + jj,
+            },
             workingHourEnabled &&
               !showMin &&
               moment$1(min).hours() !== 0 &&

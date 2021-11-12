@@ -189,7 +189,7 @@ export default class TimeGrid extends Component {
         }
 
         return (
-          <>
+          <React.Fragment key={i + '--' + jj}>
             {workingHourEnabled && !showMin && moment(min).hours() !== 0 && (
               <div
                 className={clsx('rbc-working-hours', 'rbc-working-hours-min')}
@@ -230,7 +230,7 @@ export default class TimeGrid extends Component {
                 {workingHourComponent}
               </div>
             )}
-          </>
+          </React.Fragment>
         )
       })
     )
