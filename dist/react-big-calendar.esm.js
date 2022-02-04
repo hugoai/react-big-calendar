@@ -3196,7 +3196,7 @@ function noOverlap(_ref) {
     var _maxIdx = 0
 
     for (var _j4 = 0; _j4 < e.friends.length; ++_j4) {
-      var idx = e.friends[_j4]
+      var idx = e.friends[_j4].idx
       _maxIdx = _maxIdx > idx ? _maxIdx : idx
     }
 
